@@ -10,5 +10,5 @@ package compiladores;
  * @author stevi
  */
 public enum Token {
-    ID, INT, SIGNO, ERROR, ENTER, PRESERVADA
+    ID, INT, SIGNO, ERROR, ENTER, PRESERVADA, IDENTIFICADOR, WHITE
 }

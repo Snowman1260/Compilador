@@ -161,6 +161,8 @@ public class Interfaz extends javax.swing.JFrame {
         
         String resul = "";
         int ContadorLinea = 1;
+        int ContadorCaracteresP = 0;
+        int ContadorCaracteresF = 0;
         
         while (true) {            
             Token token = lexer.yylex();
@@ -171,22 +173,56 @@ public class Interfaz extends javax.swing.JFrame {
             switch(token){
                 
                 case ID:  
-                    resul = resul + lexer.lexeme + "\r Se reconocio y es un ID en la linea  " + ContadorLinea + "\r\n";
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++;       
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un ID" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+//                    resul = resul + lexer.lexeme + "\r Se reconocio y es un ID en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case SIGNO:
-                    resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++;   
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un " + "'" + lexer.lexeme + "'" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    //resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case INT:
-                    resul = resul + lexer.lexeme + "\r Se reconocio y son numeros en la linea  " + ContadorLinea + "\r\n";
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++;
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un INT" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    //resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case ERROR:
-                    resul = resul + lexer.lexeme + "\r No se reconocio el token en la linea "+ ContadorLinea +  "\r\n";
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme + "\r No se reconocio el token en la linea "+ ContadorLinea +  "\r\n" ;
+                    ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case ENTER:
                     ContadorLinea++;
+                    ContadorCaracteresP = 0;
                     break;
                 case PRESERVADA:
-                    resul = resul + lexer.lexeme + "\r Es una palabra reservada en la linea "+ ContadorLinea +  "\r\n";
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Palabra Reservada" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+//resul = resul + lexer.lexeme + "\r Es una palabra reservada en la linea "+ ContadorLinea +  "\r\n";
+                    break;
+                case IDENTIFICADOR:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Identificador" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+//resul = resul + lexer.lexeme + "\r Es un IDENTIFICADOR en la linea "+ ContadorLinea +  "\r\n";
+                    break;
+                case WHITE:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++;
+                    //resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un ESPACIOOOO" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;                    
+//resul = resul + lexer.lexeme + "\r Es un espacio en blanco en la linea "+ ContadorLinea +  "\r\n";
                     break;
                
                     
@@ -218,7 +254,7 @@ public class Interfaz extends javax.swing.JFrame {
     }
         
     }
-    
+
     public void EncontrarRuta() throws IOException
     {
         String NombreA = "";

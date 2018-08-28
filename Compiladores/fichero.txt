@@ -1,4 +1,5 @@
-if+ - * /
-Hola757if
-+50
-+ - * / % < <= > >= = == != && || ! ; , . [ ] ( ) { } [] () {}
+if
++
+-
+hola que tal if + - void double
+bool string 
