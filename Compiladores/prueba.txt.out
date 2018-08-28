@@ -1,0 +1,43 @@
+if Es una palabra reservada en la linea 1
++ Se reconocio y es un Signo en la linea  1
+- Se reconocio y es un Signo en la linea  1
+* Se reconocio y es un Signo en la linea  1
+/ Se reconocio y es un Signo en la linea  1
+
+ No se reconocio el token en la linea 2
+
+ No se reconocio el token en la linea 2
+
+ No se reconocio el token en la linea 2
+
+ No se reconocio el token en la linea 2
+757 Se reconocio y son numeros en la linea  2
+if Es una palabra reservada en la linea 2
++50 Se reconocio y son numeros en la linea  3
++ Se reconocio y es un Signo en la linea  4
+- Se reconocio y es un Signo en la linea  4
+* Se reconocio y es un Signo en la linea  4
+/ Se reconocio y es un Signo en la linea  4
+% Se reconocio y es un Signo en la linea  4
+< Se reconocio y es un Signo en la linea  4
+<= Se reconocio y es un Signo en la linea  4
+> Se reconocio y es un Signo en la linea  4
+>= Se reconocio y es un Signo en la linea  4
+= Se reconocio y es un Signo en la linea  4
+== Se reconocio y es un Signo en la linea  4
+!= Se reconocio y es un Signo en la linea  4
+&& Se reconocio y es un Signo en la linea  4
+|| Se reconocio y es un Signo en la linea  4
+! Se reconocio y es un Signo en la linea  4
+; Se reconocio y es un Signo en la linea  4
+, Se reconocio y es un Signo en la linea  4
+. Se reconocio y es un Signo en la linea  4
+[ Se reconocio y es un Signo en la linea  4
+] Se reconocio y es un Signo en la linea  4
+( Se reconocio y es un Signo en la linea  4
+) Se reconocio y es un Signo en la linea  4
+{ Se reconocio y es un Signo en la linea  4
+} Se reconocio y es un Signo en la linea  4
+[] Se reconocio y es un Signo en la linea  4
+() Se reconocio y es un Signo en la linea  4
+{} Se reconocio y es un Signo en la linea  4

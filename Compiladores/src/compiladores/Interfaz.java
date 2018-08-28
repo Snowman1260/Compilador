@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.*;
@@ -159,6 +160,7 @@ public class Interfaz extends javax.swing.JFrame {
         Lexer lexer = new Lexer(Reader);
         
         String resul = "";
+        int ContadorLinea = 1;
         
         while (true) {            
             Token token = lexer.yylex();
@@ -169,24 +171,32 @@ public class Interfaz extends javax.swing.JFrame {
             switch(token){
                 
                 case ID:  
-                    resul = resul + lexer.lexeme + "\r Se reconocio y es un ID " + "\r\n";
+                    resul = resul + lexer.lexeme + "\r Se reconocio y es un ID en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case SIGNO:
-                    resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo " + "\r\n";
+                    resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case INT:
-                    resul = resul + lexer.lexeme + "\r Se reconocio y son numeros " + "\r\n";
+                    resul = resul + lexer.lexeme + "\r Se reconocio y son numeros en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case ERROR:
-                    resul = resul + lexer.lexeme + "\r No reconocido en la linea " + "\r\n";
+                    resul = resul + lexer.lexeme + "\r No se reconocio el token en la linea "+ ContadorLinea +  "\r\n";
                     break;
+                case ENTER:
+                    ContadorLinea++;
+                    break;
+                case PRESERVADA:
+                    resul = resul + lexer.lexeme + "\r Es una palabra reservada en la linea "+ ContadorLinea +  "\r\n";
+                    break;
+               
                     
                     
             }
+        String NombreArchivoSalida = Archivo.getName();
         
         JOptionPane.showMessageDialog(null, resul);
         
-        File fichero2 = new File("prueba.out");
+        File fichero2 = new File(NombreArchivoSalida + ".out");
         PrintWriter writer2; 
         
         try 
