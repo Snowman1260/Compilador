@@ -196,7 +196,8 @@ public class Interfaz extends javax.swing.JFrame {
                 case ERROR:
                     ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
                     ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme + "\r No se reconocio el token en la linea "+ ContadorLinea +  "\r\n" ;
+                    resul = resul + "***ERROR en la Linea " + ContadorLinea + "*** No se reconocio el Caracter: " + "'" + lexer.lexeme + "'" + "\r\n";
+                    //resul = resul + lexer.lexeme + "\r No se reconocio el token en la linea "+ ContadorLinea +  "\r\n" ;
                     ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case ENTER:
@@ -224,14 +225,29 @@ public class Interfaz extends javax.swing.JFrame {
                     ContadorCaracteresP = ContadorCaracteresF;                    
 //resul = resul + lexer.lexeme + "\r Es un espacio en blanco en la linea "+ ContadorLinea +  "\r\n";
                     break;
+                case CONSTANTES:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Constante" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    break;
+                case COMENTARIO:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Comentario" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    break;
+                
                
                     
                     
             }
         String NombreArchivoSalida = Archivo.getName();
         
-        JOptionPane.showMessageDialog(null, resul);
         
+        
+        JOptionPane.showMessageDialog(null, resul);
+              
         File fichero2 = new File(NombreArchivoSalida + ".out");
         PrintWriter writer2; 
         

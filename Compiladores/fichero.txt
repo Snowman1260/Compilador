@@ -1,5 +1,4 @@
-if
-+
--
-hola que tal if + - void double
-bool string 
+/* OTRO COMENTARIO */
+/* EnterComentario
+igual
+*/

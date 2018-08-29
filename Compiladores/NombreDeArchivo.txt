@@ -1,0 +1,2 @@
+if     En la linea 1 columnas 1-2 es una Palabra Reservada
+else     En la linea 1 columnas 4-7 es una Palabra Reservada
