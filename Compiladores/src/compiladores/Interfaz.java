@@ -5,6 +5,7 @@
  */
 package compiladores;
 
+import com.sun.javafx.scene.layout.region.Margins;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,6 +47,8 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblNombreArchivo = new javax.swing.JLabel();
         btnAnalizarArchivo = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAreaDeTexto = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,6 +70,10 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        txtAreaDeTexto.setColumns(20);
+        txtAreaDeTexto.setRows(5);
+        jScrollPane1.setViewportView(txtAreaDeTexto);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,7 +89,11 @@ public class Interfaz extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(26, 26, 26)
                         .addComponent(lblNombreArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(147, Short.MAX_VALUE))
+                .addContainerGap(418, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,7 +106,9 @@ public class Interfaz extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButSeleccionarArchivo)
                     .addComponent(btnAnalizarArchivo))
-                .addContainerGap(317, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -137,7 +150,7 @@ public class Interfaz extends javax.swing.JFrame {
             temp = temp + bfRead + "\r\n";
         }
         
-        JOptionPane.showMessageDialog(null, temp);
+        //JOptionPane.showMessageDialog(null, temp);
         
         //Leer Lexer
         int contID = 0;
@@ -173,86 +186,87 @@ public class Interfaz extends javax.swing.JFrame {
             switch(token){
                 
                 case ID:  
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++;       
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un ID" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++;
+                    
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un ID" + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
 //                    resul = resul + lexer.lexeme + "\r Se reconocio y es un ID en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case SIGNO:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++;   
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un " + "'" + lexer.lexeme + "'" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++;   
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un " + "'" + lexer.lexeme + "'" + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     //resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case INT:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++;
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_INTCONSTANTE" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++;
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un T_INTCONSTANTE" +"\t(value = " + lexer.lexeme + ")" + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     //resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
                     break;
                 case ERROR:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + "***ERROR en la Linea " + ContadorLinea + "*** No se reconocio el Caracter: " + "'" + lexer.lexeme + "'" + "\r\n";
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + "***ERROR en la Linea " + (lexer.Lineas(Reader)+1) + "*** No se reconocio el Caracter: " + "'" + lexer.lexeme + "'" + "\r\n";
                     //resul = resul + lexer.lexeme + "\r No se reconocio el token en la linea "+ ContadorLinea +  "\r\n" ;
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case ENTER:
-                    ContadorLinea++;
-                    ContadorCaracteresP = 0;
+                    //ContadorLinea++;
+                    //ContadorCaracteresP = 0;
                     break;
                 case PRESERVADA:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Palabra T_" +lexer.lexeme+ "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es una Palabra T_" +lexer.lexeme+ "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
 //resul = resul + lexer.lexeme + "\r Es una palabra reservada en la linea "+ ContadorLinea +  "\r\n";                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Palabra Reservada" + "\r\n";
 
                     break;
                 case IDENTIFICADOR:
                     if (lexer.lexeme.length() <= 31) 
                     {
-                        ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                        ContadorCaracteresP++; 
-                        resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Identificador" + "\r\n";
-                        ContadorCaracteresP = ContadorCaracteresF;
+                        //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                        //ContadorCaracteresP++; 
+                        resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un Identificador" + "\r\n";
+                        //ContadorCaracteresP = ContadorCaracteresF;
                     }
                     else
                     {
-                        ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                        ContadorCaracteresP++; 
-                        resul = resul + "***ERROR en la Linea " + ContadorLinea + "*** No se reconocio el Identificador: " + "'" + lexer.lexeme.substring(0,31) + "'" + "\r\n";
-                        ContadorCaracteresP = ContadorCaracteresF;
+                        //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                        //ContadorCaracteresP++; 
+                        resul = resul + "***ERROR en la Linea " + (lexer.Lineas(Reader)+1) + "*** No se reconocio el Identificador: " + "'" + lexer.lexeme.substring(0,31) + "'" + "\r\n";
+                        //ContadorCaracteresP = ContadorCaracteresF;
                     }
                     
 //resul = resul + lexer.lexeme + "\r Es un IDENTIFICADOR en la linea "+ ContadorLinea +  "\r\n";
                     break;
                 case WHITE:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++;
                     //resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un ESPACIOOOO" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;                    
+                    //ContadorCaracteresP = ContadorCaracteresF;                    
 //resul = resul + lexer.lexeme + "\r Es un espacio en blanco en la linea "+ ContadorLinea +  "\r\n";
                     break;
                 case CONSTANTES:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Constante" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es una Constante" + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case COMENTARIO:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
                     
-                    int ENTERSCOMENTARIOS = lexer.lexeme.indexOf("\n");
+                    //int ENTERSCOMENTARIOS = lexer.lexeme.indexOf("\n");
                     
-                    ContadorLinea = ContadorLinea + ENTERSCOMENTARIOS;
+                    //ContadorLinea = ContadorLinea + ENTERSCOMENTARIOS;
                     
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Comentario" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                   // resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Comentario" + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     
                     
                     //for (int i = 0; i < lexer.lexeme.length(); i++) 
@@ -261,28 +275,28 @@ public class Interfaz extends javax.swing.JFrame {
                     ///}
                     break;
                 case BOOL:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_BOOLCONSTANTE" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un T_BOOLCONSTANTE " + "\t(value = " + lexer.lexeme + ")"  + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case HEXADECIMAL:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_HEXACONSTANTE" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un T_INTCONSTANTE " + "\t(value = " + lexer.lexeme + ")"  + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case DOUBLE:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_DOUBLECONSTANT" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme  +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un T_DOUBLECONSTANT " + "\t(value = " + lexer.lexeme + ")"  + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 case STRING:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_STRINGCONSTANT" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    //ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un T_STRINGCONSTANT " + "\t(value = " + lexer.lexeme + ")"  + "\r\n";
+                    //ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 
                
@@ -291,10 +305,15 @@ public class Interfaz extends javax.swing.JFrame {
             }
         String NombreArchivoSalida = Archivo.getName();
         
+        int IndexOf = NombreArchivoSalida.indexOf(".");
         
+        NombreArchivoSalida = NombreArchivoSalida.substring(0,IndexOf);
         
-        JOptionPane.showMessageDialog(null, resul);
-              
+        txtAreaDeTexto.setText(resul);
+        //JOptionPane.showMessageDialog(null, resul);
+        
+
+        
         File fichero2 = new File(NombreArchivoSalida + ".out");
         PrintWriter writer2; 
         
@@ -377,6 +396,8 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton ButSeleccionarArchivo;
     private javax.swing.JButton btnAnalizarArchivo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNombreArchivo;
+    private javax.swing.JTextArea txtAreaDeTexto;
     // End of variables declaration//GEN-END:variables
 }

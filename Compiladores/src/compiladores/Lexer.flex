@@ -3,6 +3,9 @@ import static compiladores.Token.*;
 %%                                      /*DEFINICIONES*/
 %class Lexer                            /*LA CLASE QUE SE GENERARA SE LLAMA "LEXER" Y ESCRIBE CODIGO AHI*/
 %type Token                             /*LOS VALORES SE RETORNAN DE TIPO "TOKEN" */
+%line
+%column
+
 L = [a-zA-Z]                           
 D = [0-9]
 S = "+"|"-"|"*"|"/"|"%"|"<"|"<="|">"|">="|"="|"=="|"!="|"&&"|"||"|"!"|";"|","|"."|"["|"]"|"("|")"|"{"|"}"|"[]"|"()"|"{}"
@@ -16,7 +19,7 @@ IDENTIFI = {L}({D}|{L}|{GUIONBAJO})*
 
 BOOLES = "true" | "false"
 
-STRINGES = (\")~(\")
+STRINGES = (\")[^\n](\")
 
 HEXADECIMAL = 0[xX][0-9a-fA-F]+
 
@@ -30,6 +33,16 @@ COMENTARIOSLINEAS = "/*"~"*/"
 ENTER = [\n]
 WHITE = [ \t\r]
 
+%{
+public int Lineas(java.io.Reader reader)
+    {
+        return yyline;
+    }
+public int Columnas(java.io.Reader reader)
+    {
+        return yycolumn;
+    }
+%}
 %{
 public String lexeme;
 %}
