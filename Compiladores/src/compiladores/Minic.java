@@ -231,14 +231,15 @@ public class Minic extends javax.swing.JFrame {
                     {
                         //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
                         //ContadorCaracteresP++; 
-                        resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un Identificador" + "\r\n";
+                        resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un IDENTIFICADOR" + "\r\n";
+                        
                         //ContadorCaracteresP = ContadorCaracteresF;
                     }
                     else
                     {
                         //ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
                         //ContadorCaracteresP++; 
-                        resul = resul + "***ERROR en la Linea " + (lexer.Lineas(Reader)+1) + "*** No se reconocio el Identificador: " + "'" + lexer.lexeme.substring(0,31) + "'" + "\r\n";
+                        resul = resul + lexer.lexeme +"     En la linea " + (lexer.Lineas(Reader)+1) + " columnas " + (lexer.Columnas(Reader) + 1) + "-" + (lexer.Columnas(Reader) +lexer.lexeme.length()) + " es un Identificador_TRUNCADO" + "\r\n";
                         //ContadorCaracteresP = ContadorCaracteresF;
                     }
                     

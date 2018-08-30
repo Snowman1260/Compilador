@@ -1,0 +1,5 @@
+***ERROR en la Linea 1*** No se reconocio el Caracter: '#'
+prueba     En la linea 1 columnas 2-7 es un IDENTIFICADOR
+4     En la linea 1 columnas 9-9 es un T_INTCONSTANTE	(value = 4)
+2     En la linea 2 columnas 1-1 es un T_INTCONSTANTE	(value = 2)
+pruebaidentificadornotienequeserreconocidopornadadelmundosolotruncado     En la linea 3 columnas 1-69 es un Identificador_TRUNCADO
