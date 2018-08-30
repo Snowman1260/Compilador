@@ -1,4 +1,4 @@
-/* OTRO COMENTARIO */
-/* EnterComentario
-igual
-*/
+// Otro comentario
+/* hola
+que tal
+estas */
