@@ -1,4 +1,2 @@
-// Otro comentario
-/* hola
-que tal
-estas */
+/*
+*/

@@ -189,7 +189,7 @@ public class Interfaz extends javax.swing.JFrame {
                 case INT:
                     ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
                     ContadorCaracteresP++;
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un INT" + "\r\n";
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_INTCONSTANTE" + "\r\n";
                     ContadorCaracteresP = ContadorCaracteresF;
                     //resul = resul + lexer.lexeme + "\r Se reconocio y es un Signo en la linea  " + ContadorLinea + "\r\n";
                     break;
@@ -207,15 +207,27 @@ public class Interfaz extends javax.swing.JFrame {
                 case PRESERVADA:
                     ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
                     ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Palabra Reservada" + "\r\n";
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Palabra T_" +lexer.lexeme+ "\r\n";
                     ContadorCaracteresP = ContadorCaracteresF;
-//resul = resul + lexer.lexeme + "\r Es una palabra reservada en la linea "+ ContadorLinea +  "\r\n";
+//resul = resul + lexer.lexeme + "\r Es una palabra reservada en la linea "+ ContadorLinea +  "\r\n";                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es una Palabra Reservada" + "\r\n";
+
                     break;
                 case IDENTIFICADOR:
-                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
-                    ContadorCaracteresP++; 
-                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Identificador" + "\r\n";
-                    ContadorCaracteresP = ContadorCaracteresF;
+                    if (lexer.lexeme.length() <= 31) 
+                    {
+                        ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                        ContadorCaracteresP++; 
+                        resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Identificador" + "\r\n";
+                        ContadorCaracteresP = ContadorCaracteresF;
+                    }
+                    else
+                    {
+                        ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                        ContadorCaracteresP++; 
+                        resul = resul + "***ERROR en la Linea " + ContadorLinea + "*** No se reconocio el Identificador: " + "'" + lexer.lexeme.substring(0,31) + "'" + "\r\n";
+                        ContadorCaracteresP = ContadorCaracteresF;
+                    }
+                    
 //resul = resul + lexer.lexeme + "\r Es un IDENTIFICADOR en la linea "+ ContadorLinea +  "\r\n";
                     break;
                 case WHITE:
@@ -234,7 +246,42 @@ public class Interfaz extends javax.swing.JFrame {
                 case COMENTARIO:
                     ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
                     ContadorCaracteresP++; 
+                    
+                    int ENTERSCOMENTARIOS = lexer.lexeme.indexOf("\n");
+                    
+                    ContadorLinea = ContadorLinea + ENTERSCOMENTARIOS;
+                    
                     resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un Comentario" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    
+                    
+                    //for (int i = 0; i < lexer.lexeme.length(); i++) 
+                    //{
+
+                    ///}
+                    break;
+                case BOOL:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_BOOLCONSTANTE" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    break;
+                case HEXADECIMAL:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_HEXACONSTANTE" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    break;
+                case DOUBLE:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_DOUBLECONSTANT" + "\r\n";
+                    ContadorCaracteresP = ContadorCaracteresF;
+                    break;
+                case STRING:
+                    ContadorCaracteresF = lexer.lexeme.length() +ContadorCaracteresP;
+                    ContadorCaracteresP++; 
+                    resul = resul + lexer.lexeme +"     En la linea " + ContadorLinea + " columnas " + ContadorCaracteresP + "-" + ContadorCaracteresF + " es un T_STRINGCONSTANT" + "\r\n";
                     ContadorCaracteresP = ContadorCaracteresF;
                     break;
                 
@@ -278,8 +325,8 @@ public class Interfaz extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new java.io.File("D:/Universidad/Compiladores"));
         fc.setDialogTitle("Escoja la Entrada del Proyecto");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
-        fc.setFileFilter(filter);
+        //FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", ".frag", "text");
+        //fc.setFileFilter(filter);
         //fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (fc.showOpenDialog(ButSeleccionarArchivo)== JFileChooser.APPROVE_OPTION) 
         {

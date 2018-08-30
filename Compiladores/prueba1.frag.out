@@ -1,0 +1,38 @@
+***ERROR en la Linea 1*** No se reconocio el Caracter: '#'
+define     En la linea 1 columnas 2-7 es un Identificador
+PROCEDURE     En la linea 1 columnas 9-17 es un Identificador
+void     En la linea 1 columnas 19-22 es una Palabra T_void
+***ERROR en la Linea 3*** No se reconocio el Caracter: '#'
+define     En la linea 3 columnas 2-7 es un Identificador
+BEGIN     En la linea 3 columnas 9-13 es un Identificador
+{     En la linea 3 columnas 15-15 es un '{'
+***ERROR en la Linea 4*** No se reconocio el Caracter: '#'
+define     En la linea 4 columnas 2-7 es un Identificador
+END     En la linea 4 columnas 9-11 es un Identificador
+}     En la linea 4 columnas 13-13 es un '}'
+***ERROR en la Linea 6*** No se reconocio el Caracter: '#'
+define     En la linea 6 columnas 2-7 es un Identificador
+BINKY     En la linea 6 columnas 9-13 es un Identificador
+2     En la linea 6 columnas 15-15 es un INT
++     En la linea 6 columnas 17-17 es un '+'
+2     En la linea 6 columnas 19-19 es un INT
+*     En la linea 6 columnas 21-21 es un '*'
+10     En la linea 6 columnas 23-24 es un INT
+***ERROR en la Linea 9*** No se reconocio el Caracter: '#'
+PROCEDURE     En la linea 9 columnas 2-10 es un Identificador
+main     En la linea 9 columnas 12-15 es un Identificador
+()     En la linea 9 columnas 16-17 es un '()'
+***ERROR en la Linea 11*** No se reconocio el Caracter: '#'
+BEGIN     En la linea 11 columnas 2-6 es un Identificador
+Print     En la linea 12 columnas 5-9 es un Identificador
+(     En la linea 12 columnas 10-10 es un '('
+***ERROR en la Linea 12*** No se reconocio el Caracter: '#'
+BINKY     En la linea 12 columnas 12-16 es un Identificador
+)     En la linea 12 columnas 17-17 es un ')'
+;     En la linea 12 columnas 18-18 es un ';'
+***ERROR en la Linea 14*** No se reconocio el Caracter: '#'
+END     En la linea 14 columnas 2-4 es un Identificador
+***ERROR en la Linea 17*** No se reconocio el Caracter: '#'
+OTRA     En la linea 17 columnas 2-5 es un Identificador
+true     En la linea 17 columnas 7-10 es un T_BOOLCONSTANTE
+false     En la linea 17 columnas 12-16 es un T_BOOLCONSTANTE
