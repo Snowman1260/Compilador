@@ -28,10 +28,23 @@ numero = [0-9]+
 
 L = [a-zA-Z]                           
 D = [0-9]
-S = "+"|"-"|"*"|"/"|"%"|"<"|"<="|">"|">="|"="|"=="|"!="|"&&"|"||"|"!"|";"|","|"."|"["|"]"|"("|")"|"{"|"}"|"[]"|"()"|"{}"
+S = "+"|"-"|"*"|"/"|"%"|"<"|"<="|">"|">="|"="|"=="|"!="|"&&"|"||"|"!"|"[]"|"()"|"{}"
+PUNTOCOMA = ";"
+COMA = ","
+PUNTO = "."
+ABRIRPARENTESIS = "("
+CERRARPARENTESIS = ")"
+ABRIRCORCHETE = "["
+CERRARCORCHETE = "]"
+ABRIRLLAVE = "{"
+CERRARLLAVE = "}"
+
+
+
+
 GUIONBAJO = "_"
 
-PALABRASRESERVADAS = "void"|"int"|"double"|"bool"|"string"|"class"|"interface"|"null"|"this"|"extends"|"implements"|"for"|"while"|"if"|"else"|"return"|"break"|"New"|"NewArray" |"Print" | "ReadInteger" | "ReadLine" | "Malloc"
+PALABRASRESERVADAS = "void"|"int"|"double"|"bool"|"string"|"class"|"interface"|"null"|"this"|"extends"|"implements"|"for"|"while"|"if"|"else"|"return"|"break"|"New"|"NewArray"
 
 
 DOUBLES = ([-+]?[0-9]+"."([0-9]+)?)|([-+]?[0-9]+(".")[0-9]*([eE][-+]?[0-9]+))
