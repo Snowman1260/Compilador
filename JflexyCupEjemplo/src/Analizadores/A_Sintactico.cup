@@ -53,24 +53,28 @@ action code
 
 /*--------------- 2da Area: Declaraciones -----------------------*/
 //------> declaracion de terminales 
-terminal mas,menos,por,div,para,parc, string, bool,  numeros, numerospuntos, reservada, identificador, hexadecimal, enter, comentario;
+terminal mas,menos,por,div,para,parc;
+terminal division, porcentaje, negativo, menor, menorigual, mayor, mayorigual, igualigual, igual,
+         notigual, and, or, not, puntocoma, coma, punto, abrirparentesis, cerrarparentesis, abrircorchete, cerrarcorchete, abrirllave, cerrarllave,
+         nuevo, nuevoarreglo, leerint, leerlinea, malloc, breaking, interG, doubleG, booles, stringes, ident, voides, classing, exetndsing, implementsing, interfaceing, ifing,
+         whileing, foring, returning, elseing, thising, nulling, guionbajo, doubles, identifi, boolesing, stringesing, hexadecimal, constante, comentariolinea, comentariolineas,
+         simboling;
 terminal String num;
-terminal String signo;
-terminal String white;
-
 
 //------> declaracion de no terminales
-non terminal String INICIO,E,A;
+non terminal String INICIO,E;
+non terminal String PROGRAM, Decl, VariableDecl, Variable, Type, FunctionDecl, Formals, ClassDecl, EXTENDS, IMPLEMENTS,
+                    IDENT, Field, InterfaceDecl, Prototype, StmtBlock, VARIABLEDECL, STMT, Stmt, EXPR, IfStmt, ELSE, WhileStmt,
+                    ForStmt, ReturnStmt, BreakStmt, PrintStmt, EXPRPR, Expr, LValue, Call, LibCall, Actuals, Constant;
 
 //----> precedencia de menor a mayor 
-precedence left mas, menos;
-precedence left por, div;
+/*precedence left mas, menos;
+precedence left por, div;*/
+start with PROGRAM;
 
-start with INICIO;
 
 /*--------------- 3ra Area: Reglas Semanticas -----------------------*/
-INICIO::=E:a {: resultado=a; :}
-        |A:b {: resultado=b; :};
+/*INICIO::=E:a {: resultado=a; :};
 
 E::= E:a mas E:b {: int val1= Integer.parseInt(a);
                     int val2= Integer.parseInt(b);
@@ -90,4 +94,141 @@ E::= E:a mas E:b {: int val1= Integer.parseInt(a);
                     RESULT = String.valueOf(r); :}
     |para E:a parc {: RESULT = a; :} 
     |num:a {: RESULT = a; :};
-A::= signo:b    {: RESULT = "No hay error";   :};
+*/
+
+PROGRAM::=Decl
+         |Decl PROGRAM;
+
+Decl::=VariableDecl
+      |FunctionDecl
+      |ClassDecl
+      |InterfaceDecl;
+
+VariableDecl::= Variable;
+
+Variable::= Type identifi;
+
+Type::= interG
+       |doubleG
+       |booles
+       |stringes
+       |identifi
+       |Type simboling;
+
+FunctionDecl::= Type identifi abrirparentesis Formals cerrarparentesis StmtBlock
+               |voides identifi abrirparentesis Formals cerrarparentesis StmtBlock;
+
+Formals::= Variable
+          |Variable Formals
+          |'';
+
+ClassDecl::= classing identifi EXTENDS IMPLEMENTS abrirllave Field cerrarllave
+
+EXTENDS::= exetndsing identifi
+            |'';
+
+IMPLEMENTS::= implementsing identifi IDENT;
+
+IDENT::= ident IDENT coma
+        |'';
+
+Field::= VariableDecl Field
+        |FunctionDecl Field
+        |//
+        ;
+
+InterfaceDecl::= interfaceing identifi abrirllave Prototype cerrarllave;
+
+Prototype::= Type identifi abrirparentesis Formals cerrarparentesis puntocoma Prototype
+            |void identifi abrirparentesis Formals cerrarparentesis puntocoma Prototype
+            |//
+            ;
+
+StmtBlock::= abrirllave VARIABLEDECL STMT cerrarllave;
+
+VARIABLEDECL::= VariableDecl VARIABLEDECL
+               |//
+                ;
+
+STMT::= Stmt STMT
+       |/**/;
+
+Stmt::= EXPR;
+        |IfStmt
+        |WhileStmt
+        |ForStmt
+        |BreakStmt
+        |ReturnStmt
+        |PrintStmt
+        |StmtBlock;
+
+EXPR::= Expr
+        |/**/;
+
+IfStmt::= ifing abrirparentesis Expr cerrarparentesis Stmt ELSE;
+
+ELSE::= elseing Stmt
+        |/**/;
+WhileStmt::=whileing abrirllave Expr cerrarllave Stmt;
+
+ForStmt::= foring abrirllave EXPR puntocoma Expr puntocoma EXPR cerrarllave Stmt;
+
+ReturnStmt::= returning EXPR puntocoma;
+
+BreakStmt::= breaking puntocoma;
+
+PrintStmt::= /**/;
+
+EXPRPR::= Expr
+         |Expr EXPRPR;
+
+Expr::= LValue igual Expr
+       |Constant
+       |LValue
+       |this
+       |Call
+       |Expr mas Expr
+       |Expr menos Expr
+       |Expr por Expr
+       |Expr div Expr
+       |negativo Expr
+       |Expr menor Expr
+       |Expr menorigual Expr
+       |Expr mayor Expr
+       |Expr mayorigual Expr
+       |Expr igualigual Expr
+       |Expr notigual Expr
+       |Expr and Expr
+       |Expr or Expr
+       |not Expr
+       |nuevo abrirparentesis identifi cerrarparentesis
+       |nuevoarreglo abrirparentesis Expr coma Type cerrarparentesis
+       |leerint abrirparentesis cerrarparentesis
+       |leerlinea abrirparentesis cerrarparentesis
+       |malloc abrirparentesis Expr cerrarparentesis;
+
+       LValue ::= identifi 
+	    | Expr punto identifi 
+            | Expr abrircorchete Expr cerrarcorchete;
+
+        Call ::= identifi abrirparentesis Actuals cerrarparentesis
+                 |Expr punto identifi abrirparentesis Actuals cerrarparentesis
+                 |Expr punto LibCall abrirparentesis Actuals cerrarparentesis;
+
+
+        LibCall ::== GetByte abrirparentesis Expr cerrarparentesis
+                    |SetByte abrirparentesis Expr coma Expr cerrarparentesis;
+
+        Actuals ::== EXPRPR coma
+                    |/**/;
+
+        Constant ::== doubles
+                     |boolesing
+                     |stringesing
+                     |num;
+
+
+
+
+
+

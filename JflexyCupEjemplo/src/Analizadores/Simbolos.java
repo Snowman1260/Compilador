@@ -8,26 +8,70 @@ package Analizadores;
 /** CUP generated class containing symbol constants. */
 public class Simbolos {
   /* terminals */
-  public static final int string = 8;
-  public static final int parc = 7;
-  public static final int para = 6;
-  public static final int hexadecimal = 14;
-  public static final int por = 4;
-  public static final int white = 19;
-  public static final int num = 17;
+  public static final int igualigual = 15;
+  public static final int comentariolineas = 61;
+  public static final int doubles = 54;
+  public static final int interG = 36;
+  public static final int comentariolinea = 60;
+  public static final int hexadecimal = 58;
+  public static final int booles = 38;
+  public static final int interfaceing = 45;
+  public static final int coma = 22;
+  public static final int igual = 16;
+  public static final int negativo = 10;
+  public static final int malloc = 34;
+  public static final int nuevoarreglo = 31;
+  public static final int leerint = 32;
+  public static final int thising = 51;
+  public static final int nulling = 52;
+  public static final int breaking = 35;
+  public static final int stringes = 39;
   public static final int menos = 3;
-  public static final int bool = 9;
-  public static final int numerospuntos = 11;
-  public static final int div = 5;
+  public static final int menor = 11;
+  public static final int cerrarparentesis = 25;
+  public static final int porcentaje = 9;
   public static final int EOF = 0;
-  public static final int signo = 18;
-  public static final int error = 1;
-  public static final int comentario = 16;
-  public static final int reservada = 12;
-  public static final int enter = 15;
+  public static final int ident = 40;
+  public static final int parc = 7;
   public static final int mas = 2;
-  public static final int numeros = 10;
-  public static final int identificador = 13;
+  public static final int doubleG = 37;
+  public static final int para = 6;
+  public static final int abrirparentesis = 24;
+  public static final int error = 1;
+  public static final int identifi = 55;
+  public static final int whileing = 47;
+  public static final int mayor = 13;
+  public static final int nuevo = 30;
+  public static final int implementsing = 44;
+  public static final int or = 19;
+  public static final int menorigual = 12;
+  public static final int por = 4;
+  public static final int punto = 23;
+  public static final int classing = 42;
+  public static final int guionbajo = 53;
+  public static final int mayorigual = 14;
+  public static final int cerrarllave = 29;
+  public static final int exetndsing = 43;
+  public static final int cerrarcorchete = 27;
+  public static final int abrircorchete = 26;
+  public static final int and = 18;
+  public static final int not = 20;
+  public static final int puntocoma = 21;
+  public static final int leerlinea = 33;
+  public static final int elseing = 50;
+  public static final int simboling = 62;
+  public static final int boolesing = 56;
+  public static final int voides = 41;
+  public static final int constante = 59;
+  public static final int abrirllave = 28;
+  public static final int div = 5;
+  public static final int foring = 48;
+  public static final int num = 63;
+  public static final int division = 8;
+  public static final int notigual = 17;
+  public static final int stringesing = 57;
+  public static final int returning = 49;
+  public static final int ifing = 46;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -37,18 +81,62 @@ public class Simbolos {
   "div",
   "para",
   "parc",
-  "string",
-  "bool",
-  "numeros",
-  "numerospuntos",
-  "reservada",
-  "identificador",
+  "division",
+  "porcentaje",
+  "negativo",
+  "menor",
+  "menorigual",
+  "mayor",
+  "mayorigual",
+  "igualigual",
+  "igual",
+  "notigual",
+  "and",
+  "or",
+  "not",
+  "puntocoma",
+  "coma",
+  "punto",
+  "abrirparentesis",
+  "cerrarparentesis",
+  "abrircorchete",
+  "cerrarcorchete",
+  "abrirllave",
+  "cerrarllave",
+  "nuevo",
+  "nuevoarreglo",
+  "leerint",
+  "leerlinea",
+  "malloc",
+  "breaking",
+  "interG",
+  "doubleG",
+  "booles",
+  "stringes",
+  "ident",
+  "voides",
+  "classing",
+  "exetndsing",
+  "implementsing",
+  "interfaceing",
+  "ifing",
+  "whileing",
+  "foring",
+  "returning",
+  "elseing",
+  "thising",
+  "nulling",
+  "guionbajo",
+  "doubles",
+  "identifi",
+  "boolesing",
+  "stringesing",
   "hexadecimal",
-  "enter",
-  "comentario",
-  "num",
-  "signo",
-  "white"
+  "constante",
+  "comentariolinea",
+  "comentariolineas",
+  "simboling",
+  "num"
   };
 }
 
