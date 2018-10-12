@@ -1,0 +1,171 @@
+ 
+   
+/* ---------------Seccion de declaraciones preliminares--------------------*/
+package ejemplocup;
+
+/* Import the class java_cup.runtime.*  */
+import java_cup.runtime.*;
+   
+/* Codigo del parser, se copia integramente a la clase final.
+    Agregamos el manejo de errores. */
+parser code {:
+    
+    /* Reporte de error encontrado. */
+    public void report_error(String message, Object info) {
+        StringBuilder m = new StringBuilder("Error");
+        if (info instanceof java_cup.runtime.Symbol) {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+            if (s.left >= 0) {                
+                m.append(" in line "+(s.left+1));
+                if (s.right >= 0)
+                    m.append(", column "+(s.right+1));
+            }
+        }
+        m.append(" : "+message);
+        System.err.println(m);
+    }
+   
+    /* Cuando se encuentra un error de donde el sistema no puede
+        recuperarse, se lanza un error fatal. Se despliega el mensaje
+        de error y se finaliza la ejecucion. */
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+   
+
+   
+/* ------------Declaracion de simbolos terminales y no terminales---------- */
+   
+/* Terminales (tokens obtenidos por el analizador lexico).  
+
+   Terminales que no tienen un valor son listados primero, los terminales que
+   tienen un valor como los enteros son listados en la segunda o demas lineas. */
+terminal           SEMI, OP_SUMA, OP_RESTA, OP_MULT, IZQ_PAREN, DER_PAREN,
+                      IMPRIMIR;
+terminal Integer   ENTERO;
+   
+/* No terminales usados en la seccion gramatical. 
+
+   Primero se lista los no terminales que tienen un valor Object y despues
+   se lista los no terminales que tienen un entero. Un Object se refiere a que
+   no tienen tipo, pudiendo ser entero o String. */
+non terminal Object     expr_list, expr_part, expr_imprimir;
+non terminal Integer    expr, factor, term;
+   
+
+/* -------------Precedence and Associatively of Terminals Section----------- */
+   
+/*
+  Precedence of non terminals could be defined here.  If you do define
+  precedence here you won't need to worry about precedence in the
+  Grammar Section, i.e. that TIMES should have a higher precedence
+  than PLUS.
+  
+  The precedence defined here would look something like this where the
+  lower line always will have higher precedence than the line before it.
+   
+  precedence left PLUS, MINUS; 
+  precedence left TIMES, DIVIDE; 
+*/
+/* ------------------- Seccion de la gramatica ------------------------ */
+   
+Program       ::= Decl Decl1
+Decl          ::= VariableDecl 
+              |   FunctionDecl
+              |   ClassDecl
+              |   InterfaceDecl
+VariableDecl  ::= Variable PUNTOYCOMA
+Variable      ::= Type ident
+Type          ::= int
+              |   double
+              |   bool
+              |   string
+              |   ident
+              |   Type CORCHETES
+FunctionDecl  ::= Type ident PARENTESISI Formals PARENTESISD StmtBlock
+              |   void ident PARENTESISI Formals PARENTESISD StmtBlock
+Formals       ::= Variable Variable1 COMA 
+              |   /*Epsilon*/
+ClassDecl     ::= class ident MENOR extends ident MAYOR MENOR implements ident Ident1 COMA MAYOR LLAVEI Field1 LLAVED
+Field         ::= VariableDecl
+              |   FunctionDecl
+InterfaceDecl ::= interface ident LLAVEI Prototype1 LLAVED
+Protototype   ::= Type ident PARENTESISI Formals PARENTESISD PUNTOYCOMA
+              |   void ident PARENTESISI Formals PARENTESISD PUNTOYCOMA
+StmtBlock     ::= LLAVEI VariableDecl1 Stmt1 LLAVED
+Stmt          ::= MENOR Expr MAYOR PUNTOYCOMA 
+              |   IfStmt
+              |   WhileStmt
+              |   ForStmt
+              |   BreakStmt
+              |   ReturnStmt
+              |   PrintStmt
+              |   StmtBlock
+IfSymy        ::= if PARENTESISI Expr PARENTESISD Stmt MENOR else Stmt MAYOR
+WhileStmt     ::= while PARENTESISI Expr PARENTESISD Stmt
+ForStmt       ::= for PARENTESISI MENOR Expr MAYOR PUNTOYCOMA Expr PUNTOYCOMA MENOR Expr MAYOR PARENTESISD Stmt
+ReturnStmt    ::= retunr MENOR Expr MAYOR PUNTOYCOMA
+BreakStmt     ::= break PUNTOYCOMA
+PrintStmt     ::= Print PARENTESISI Expr Expr1 COMA PARENTESISD PUNTOYCOMA
+Expr          ::= LValue IGUAL Expr
+              |   Constant
+              |   LValue
+              |   this
+              |   Call
+              |   PARENTESISI Expr PARENTESISD
+              |   Expr SUMA Expr
+              |   Expr RESTA Expr
+              |   Expr MULTIPLICACION Expr
+              |   Expr DIVISION Expr
+              |   Expr MOD Expr
+              |   RESTA Expr
+              |   Expr MENOR Expr
+              |   Expr MENORIGUAL Expr
+              |   Expr MAYOR Expr
+              |   Expr MAYORIGUAL Expr
+              |   Expr IGUALIGUAL Expr
+              |   Expr DIFERENTE Expr
+              |   Expr AND Expr
+              |   Expr OR Expr
+              |   NEGACION Expr
+              |   Expr New PARENTESISI ident PARENTESISD
+              |   NewArray PARENTESISI Expr COMA Type PARENTESISD
+              |   ReadInteger PARENTESIS
+              |   ReadLine PARENTESIS
+              |   Malloc PARENTESISI Expr PARENTESISD
+LValue        ::= ident 
+              |   Expr PUNTO ident
+              |   Expr CORCHETEI Expr CORCHETED 
+Call          ::= ident PARENTESISI Actuals PARENTESISD
+              |   Expr PUNTO ident PARENTESISI Actuals PARENTESISD
+              |   Expr PUNTO LibCall PARENTESISI Actuals PARENTESISD
+LibCall       ::= GetByte PARENTESISI Expr PARENTESISD
+              |   SetByte PARENTESISI Expr COMA Expr PARENTESISD
+Actuals       ::= Expr Expr1 COMA
+              |   /*Epsilon*/
+Constant      ::= intConstant
+              |   doubleConstant
+              |   boolConstan
+              |   stringConstan
+              |   null
+
+
+
+Decl1         ::= Decl Decl1
+              |   /*Epsilon*/
+Variable1     ::= Variable Variable1
+              |   /*Epsilon*/
+Ident1        ::= ident Ident1
+              |   /*Epsilon*/
+Field1        ::= Field Field1
+              |   /*Epsilon*/
+Prototype1    ::= Prototype Prototype1
+              |   /*Epsilon*/
+VariableDecl1 ::= VariableDecl VariableDecl1
+              |   /*Epsilon*/
+Stmt1         ::= Stmt Stmt1
+              |   /*Epsilon*/
+Expr1         ::= Expr Expr1
+              |   /*Epsilon*/

@@ -1,0 +1,249 @@
+package Compiladores;
+
+import java_cup.runtime.*;
+import java.io.FileReader;
+
+parser code 
+{:
+    public void report_error(String message, Object info) 
+    {
+        StringBuilder m = new StringBuilder("Error");
+        if (info instanceof java_cup.runtime.Symbol) 
+        {
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+            if (s.left >= 0) 
+            {                
+                m.append(" in line "+(s.left+1));
+                if (s.right >= 0)
+                {
+                    m.append(", column "+(s.right+1));
+                }
+            }
+        }
+        m.append(" : "+message);
+        System.err.println(m);
+    }
+
+    public void report_fatal_error(String message, Object info) 
+    {
+        report_error(message, info);
+        System.exit(1);
+    }
+
+    public static void main(String[] args)
+    {
+        try 
+        {
+            AnalizadorSintactico asin = new AnalizadorSintactico(
+                    new AnalizadorLexico( new FileReader(args[0])));
+            Object result = asin.parse().value;
+            System.out.println("\n*** Resultados finales ***");
+        } 
+        catch (Exception ex) 
+        {
+            ex.printStackTrace();
+        }
+    }
+:};
+   
+
+   
+/* ------------Simbolos Terminales---------- */
+terminal  IgualIgual, IMPLEMENTS, INT,  INTERFACE, LlavesDer, LlavesIzq, Llaves, MALLOC, Mayor, MayorIgual, Menor, MenorIgual, Mod, Multiplicacion, Negacion, NEW, And, BOOL, BOOLEANO, BREAK,  CADENA,  CLASS, Coma, CorcheteDER, CorcheteIZQ, Corchetes, DECIMAL, Diferente, Division, DOUBLE, ELSE,  ENTERO, EXTENDS, FOR, HEXADECIMAL, IDENTIFICADOR, IF, Igual, NEWARRAY, NULL, Or, Parentesis,   ParentesisDer, ParentesisIzq, PRINT, Punto, PuntoyComa, READINTEGER, READLINE,  Resta, RETURN, STRING, Suma, THIS, VOID, WHILE, GETBYTE, SETBYTE;
+          
+          
+                      
+
+/* ------------Simbolos No Terminales---------- */
+non terminal Object   LValue, PrintStmt,   Program, Prototype, ReturnStmt, Stmt, StmtBlock,Type, Variable,   VariableDecl, WhileStmt, ClassDECL, ClassDECLA, ExprA, Actuals,  BreakStmt, ClassDecl, Constant, Decl, Expr, Field, Formals, ForStmt, FunctionDecl, IfStmt, InterfaceDecl, ExprAE, FieldA,  FormalsA,  Identificador1, IfStmt1, InterfaceDeclA, StmtBlockA, StmtBLOCK, StmtBLOCKA, Call, LibCall; 
+                      
+                               
+                      
+
+/* -------------LEFT----------- */
+precedence left Coma, Punto, PuntoyComa;
+precedence left Or;
+precedence left And;
+precedence left IgualIgual, Diferente;
+precedence left Menor, MenorIgual, Mayor, MayorIgual;
+precedence left Resta, Suma;
+precedence left Division, Multiplicacion, Mod;
+precedence left Igual;
+precedence left Negacion;
+precedence left Corchetes, Parentesis, Llaves;
+precedence left CorcheteIZQ, CorcheteDER, ParentesisIzq, ParentesisDer;
+precedence left LlavesIzq, LlavesDer;
+
+precedence left IF, ELSE;
+precedence left IDENTIFICADOR;
+/* ------------------- SINTACTICO ------------------------ */
+   
+Program ::= Decl Program
+        |    
+        ;
+
+Decl ::= VariableDecl 
+         |   FunctionDecl
+         |   ClassDecl
+         |   InterfaceDecl
+         |   error PuntoyComa
+         |   error ParentesisIzq
+              ;
+VariableDecl  ::= Variable PuntoyComa
+              ;
+Variable ::= Type IDENTIFICADOR
+         ;
+Type     ::= INT
+         |   DOUBLE
+         |   BOOL
+         |   STRING
+         |   IDENTIFICADOR
+         |   Type Corchetes
+         ;
+FunctionDecl  ::= Type IDENTIFICADOR ParentesisIzq Formals ParentesisDer StmtBlock
+              |   VOID IDENTIFICADOR ParentesisIzq Formals ParentesisDer StmtBlock
+              | Type IDENTIFICADOR Parentesis StmtBlock 
+              | VOID IDENTIFICADOR Parentesis StmtBlock 
+              ;
+
+Formals  ::= Variable FormalsA
+         |    
+         ;
+FormalsA ::= Coma Variable FormalsA
+         |    
+         ;
+
+ClassDecl ::= CLASS IDENTIFICADOR ClassDECL ClassDECLA LlavesIzq FieldA LlavesDer
+          |   CLASS IDENTIFICADOR ClassDECL ClassDECLA Llaves
+          ;
+ClassDECL ::= EXTENDS IDENTIFICADOR 
+          |     
+          ;
+ClassDECLA ::= IMPLEMENTS IDENTIFICADOR Identificador1
+           |     
+           ;
+Identificador1 ::= Coma IDENTIFICADOR Identificador1 
+               |    
+               ;
+
+FieldA ::= Field FieldA
+       |    
+       ;
+Field  ::= VariableDecl
+       |   FunctionDecl
+       ;
+
+InterfaceDecl ::= INTERFACE IDENTIFICADOR LlavesIzq InterfaceDeclA LlavesDer
+              |   INTERFACE IDENTIFICADOR Llaves
+              ;
+InterfaceDeclA ::= Prototype InterfaceDeclA 
+              |    
+              ;
+
+Prototype ::= Type IDENTIFICADOR ParentesisIzq Formals ParentesisDer PuntoyComa
+          |   VOID IDENTIFICADOR ParentesisIzq Formals ParentesisDer PuntoyComa
+          |   Type IDENTIFICADOR Parentesis PuntoyComa 
+          |   VOID IDENTIFICADOR Parentesis PuntoyComa
+              ;
+
+StmtBlock     ::= LlavesIzq StmtBlockA LlavesDer
+              |   Llaves
+              ;
+StmtBlockA    ::= StmtBLOCK StmtBlockA
+              |   StmtBLOCKA StmtBlockA
+              |
+              ;
+StmtBLOCK    ::= VariableDecl
+              ;
+
+StmtBLOCKA   ::= Stmt
+              ;
+
+Stmt ::= ExprA PuntoyComa
+     |   IfStmt
+     |   WhileStmt
+     |   ForStmt
+     |   BreakStmt
+     |   ReturnStmt
+     |   PrintStmt
+     |   StmtBlock
+     ;
+ExprA ::= Expr
+      |    
+      ;
+
+IfStmt  ::= IF ParentesisIzq Expr ParentesisDer Stmt IfStmt1
+        ;
+IfStmt1 ::= ELSE Stmt
+        |    
+        ;
+
+WhileStmt ::= WHILE ParentesisIzq Expr ParentesisDer Stmt
+          ;
+ForStmt   ::= FOR ParentesisIzq ExprA PuntoyComa Expr PuntoyComa ExprA ParentesisDer Stmt
+          ;
+ReturnStmt ::= RETURN ExprA PuntoyComa
+           ;
+BreakStmt  ::= BREAK PuntoyComa
+           ;
+PrintStmt  ::= PRINT ParentesisIzq Expr ExprAE ParentesisDer PuntoyComa
+           ;
+
+
+Expr       ::= LValue Igual Expr
+           |   Constant
+           |   LValue
+           |   THIS
+           |   Call
+           |   ParentesisIzq Expr ParentesisDer
+           |   Expr Suma Expr
+           |   Expr Resta Expr
+           |   Expr Multiplicacion Expr
+           |   Expr Division Expr
+           |   Expr Mod Expr
+           |   Resta Expr
+           |   Expr Menor Expr
+           |   Expr MenorIgual Expr
+           |   Expr Mayor Expr
+           |   Expr MayorIgual Expr
+           |   Expr IgualIgual Expr
+           |   Expr Diferente Expr
+           |   Expr And Expr
+           |   Expr Or Expr
+           |   Negacion Expr
+           |   NEW ParentesisIzq IDENTIFICADOR ParentesisDer
+           |   NEWARRAY ParentesisIzq Expr Coma Type ParentesisDer
+           |   READINTEGER ParentesisIzq ParentesisDer
+           |   READINTEGER Parentesis
+           |   READLINE ParentesisIzq ParentesisDer
+           |   READLINE Parentesis
+           |   MALLOC ParentesisIzq Expr ParentesisDer
+           ;
+
+LValue  ::= IDENTIFICADOR 
+        |   Expr Punto IDENTIFICADOR
+        |   Expr CorcheteIZQ Expr CorcheteDER 
+        ;
+
+Call    ::= IDENTIFICADOR ParentesisIzq Actuals ParentesisDer
+        |   Expr Punto IDENTIFICADOR ParentesisIzq Actuals ParentesisDer
+        |   Expr Punto LibCall ParentesisIzq Actuals ParentesisDer
+        ;
+LibCall ::= GETBYTE ParentesisIzq Expr ParentesisDer
+        |   SETBYTE ParentesisIzq Expr Coma Expr ParentesisDer
+        ;
+
+ExprAE  ::= Coma Expr ExprAE
+        |    
+        ;
+
+Actuals ::= Expr ExprAE
+        |    
+        ;
+Constant ::= ENTERO
+         |   BOOLEANO
+         |   HEXADECIMAL
+         |   DECIMAL
+         |   CADENA
+         |   NULL
+         ;

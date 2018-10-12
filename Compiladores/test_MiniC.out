@@ -1,0 +1,6 @@
+int	 Linea 0 Columnas: 0-3 es INT
+
+c	 Linea 0 Columnas: 4-5 es IDENTIFICADOR
+
+;	 Linea 0 Columnas: 5-6 es ';'
+
