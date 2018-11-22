@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Scanner;
 /**
  *
- * @author juan pablo
+ * @author Steven Villatoro
  */
 public class MainConsola {
     /**

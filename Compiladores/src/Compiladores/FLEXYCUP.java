@@ -5,7 +5,9 @@
  */
 package Compiladores;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -13,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author arturo
+ * @author Steven Villatoro
  */
 public class FLEXYCUP {
 
@@ -74,6 +76,23 @@ public class FLEXYCUP {
                     break;
                 }
                 case EJECUTAR: {
+                    
+                    File ArchivoConInclude = new File(RutaArchivo);
+                    try 
+                    {
+                        FileReader Entrada = new FileReader(RutaArchivo);
+                        BufferedReader br = new BufferedReader(Entrada);
+                        String Verificar = br.readLine();
+                        //Verificar = Verificar.substring(0,8);
+                        if (Verificar == "#include <t32.txt>" )
+                        {                            
+                            System.out.println("Se leyo un include");
+                        }
+                    }
+                    catch (Exception e) 
+                    {
+
+                    }
                     /*  Ejecutamos el analizador lexico y sintactico
                      sobre un archivo de pruebas. 
                      */

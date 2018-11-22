@@ -8,127 +8,135 @@ package Compiladores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int Or = 42;
-  public static final int Corchetes = 27;
-  public static final int CorcheteIZQ = 26;
-  public static final int Coma = 24;
-  public static final int READLINE = 50;
-  public static final int Negacion = 16;
-  public static final int ParentesisDer = 44;
-  public static final int LlavesIzq = 7;
-  public static final int ENTERO = 33;
-  public static final int IgualIgual = 2;
-  public static final int DOUBLE = 31;
-  public static final int Diferente = 29;
-  public static final int INTERFACE = 5;
-  public static final int INT = 4;
-  public static final int Menor = 12;
-  public static final int FOR = 35;
-  public static final int IDENTIFICADOR = 37;
-  public static final int READINTEGER = 49;
-  public static final int Mayor = 10;
-  public static final int BOOL = 19;
-  public static final int Punto = 47;
-  public static final int CLASS = 23;
-  public static final int NEWARRAY = 40;
-  public static final int Division = 30;
-  public static final int IF = 38;
-  public static final int GETBYTE = 58;
-  public static final int THIS = 55;
-  public static final int CorcheteDER = 25;
-  public static final int SETBYTE = 59;
+  public static final int CORCHETES = 59;
+  public static final int READLINE = 32;
+  public static final int PUNTOYCOMA = 50;
+  public static final int ENTERO = 63;
+  public static final int DIFERENTE = 46;
+  public static final int RESTA = 36;
+  public static final int DOUBLE = 12;
+  public static final int PARENTESIS = 60;
+  public static final int PARENIZQ = 55;
+  public static final int SEMI = 2;
+  public static final int LLAVEDER = 58;
+  public static final int PORCENTAJE = 39;
+  public static final int INTERFACE = 16;
+  public static final int INT = 11;
+  public static final int FOR = 21;
+  public static final int IDENTIFICADOR = 62;
+  public static final int AND = 47;
+  public static final int MENORIGUAL = 41;
+  public static final int CORCHIZQ = 53;
+  public static final int IGUAL = 44;
+  public static final int READINTEGER = 30;
+  public static final int OR = 48;
+  public static final int IGUALDAD = 45;
+  public static final int BOOL = 13;
+  public static final int CONSTBOOLEANAS = 9;
+  public static final int CLASS = 15;
+  public static final int SUMA = 35;
+  public static final int NEWARRAY = 28;
+  public static final int IF = 23;
+  public static final int THIS = 18;
+  public static final int GETBYTE = 33;
+  public static final int CONSTSTRING = 8;
+  public static final int MAYORIGUAL = 43;
+  public static final int SETBYTE = 34;
   public static final int EOF = 0;
-  public static final int DECIMAL = 28;
-  public static final int RETURN = 52;
-  public static final int LlavesDer = 6;
-  public static final int And = 18;
-  public static final int NEW = 17;
+  public static final int RETURN = 25;
+  public static final int NEW = 27;
   public static final int error = 1;
-  public static final int CADENA = 22;
-  public static final int PuntoyComa = 48;
-  public static final int NULL = 41;
-  public static final int BREAK = 21;
-  public static final int VOID = 56;
-  public static final int Llaves = 8;
-  public static final int ParentesisIzq = 45;
-  public static final int MenorIgual = 13;
-  public static final int ELSE = 32;
-  public static final int WHILE = 57;
-  public static final int Parentesis = 43;
-  public static final int Mod = 14;
-  public static final int EXTENDS = 34;
-  public static final int Resta = 51;
-  public static final int HEXADECIMAL = 36;
-  public static final int MayorIgual = 11;
-  public static final int BOOLEANO = 20;
-  public static final int STRING = 53;
-  public static final int MALLOC = 9;
-  public static final int Multiplicacion = 15;
-  public static final int Suma = 54;
-  public static final int IMPLEMENTS = 3;
-  public static final int Igual = 39;
-  public static final int PRINT = 46;
+  public static final int COMA = 51;
+  public static final int OP_MULT = 5;
+  public static final int NEGACION = 49;
+  public static final int MENOR = 40;
+  public static final int NULL = 17;
+  public static final int OP_RESTA = 4;
+  public static final int PARENDER = 56;
+  public static final int BREAK = 26;
+  public static final int VOID = 10;
+  public static final int MAYOR = 42;
+  public static final int ELSE = 24;
+  public static final int PUNTO = 52;
+  public static final int CORCHDER = 54;
+  public static final int LLAVES = 61;
+  public static final int WHILE = 22;
+  public static final int LLAVEIZQ = 57;
+  public static final int CONSTENTERO = 7;
+  public static final int CONSTDOUBLE = 6;
+  public static final int EXTENDS = 19;
+  public static final int STRING = 14;
+  public static final int MALLOC = 31;
+  public static final int OP_SUMA = 3;
+  public static final int DIVISION = 38;
+  public static final int IMPLEMENTS = 20;
+  public static final int PRINT = 29;
+  public static final int MULTIPLICACION = 37;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "IgualIgual",
-  "IMPLEMENTS",
-  "INT",
-  "INTERFACE",
-  "LlavesDer",
-  "LlavesIzq",
-  "Llaves",
-  "MALLOC",
-  "Mayor",
-  "MayorIgual",
-  "Menor",
-  "MenorIgual",
-  "Mod",
-  "Multiplicacion",
-  "Negacion",
-  "NEW",
-  "And",
-  "BOOL",
-  "BOOLEANO",
-  "BREAK",
-  "CADENA",
-  "CLASS",
-  "Coma",
-  "CorcheteDER",
-  "CorcheteIZQ",
-  "Corchetes",
-  "DECIMAL",
-  "Diferente",
-  "Division",
-  "DOUBLE",
-  "ELSE",
-  "ENTERO",
-  "EXTENDS",
-  "FOR",
-  "HEXADECIMAL",
-  "IDENTIFICADOR",
-  "IF",
-  "Igual",
-  "NEWARRAY",
-  "NULL",
-  "Or",
-  "Parentesis",
-  "ParentesisDer",
-  "ParentesisIzq",
-  "PRINT",
-  "Punto",
-  "PuntoyComa",
-  "READINTEGER",
-  "READLINE",
-  "Resta",
-  "RETURN",
-  "STRING",
-  "Suma",
-  "THIS",
+  "SEMI",
+  "OP_SUMA",
+  "OP_RESTA",
+  "OP_MULT",
+  "CONSTDOUBLE",
+  "CONSTENTERO",
+  "CONSTSTRING",
+  "CONSTBOOLEANAS",
   "VOID",
+  "INT",
+  "DOUBLE",
+  "BOOL",
+  "STRING",
+  "CLASS",
+  "INTERFACE",
+  "NULL",
+  "THIS",
+  "EXTENDS",
+  "IMPLEMENTS",
+  "FOR",
   "WHILE",
+  "IF",
+  "ELSE",
+  "RETURN",
+  "BREAK",
+  "NEW",
+  "NEWARRAY",
+  "PRINT",
+  "READINTEGER",
+  "MALLOC",
+  "READLINE",
   "GETBYTE",
-  "SETBYTE"
+  "SETBYTE",
+  "SUMA",
+  "RESTA",
+  "MULTIPLICACION",
+  "DIVISION",
+  "PORCENTAJE",
+  "MENOR",
+  "MENORIGUAL",
+  "MAYOR",
+  "MAYORIGUAL",
+  "IGUAL",
+  "IGUALDAD",
+  "DIFERENTE",
+  "AND",
+  "OR",
+  "NEGACION",
+  "PUNTOYCOMA",
+  "COMA",
+  "PUNTO",
+  "CORCHIZQ",
+  "CORCHDER",
+  "PARENIZQ",
+  "PARENDER",
+  "LLAVEIZQ",
+  "LLAVEDER",
+  "CORCHETES",
+  "PARENTESIS",
+  "LLAVES",
+  "IDENTIFICADOR",
+  "ENTERO"
   };
 }
 
