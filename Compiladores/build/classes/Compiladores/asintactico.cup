@@ -54,7 +54,6 @@ parser code {:
 	
 	List<TablaSimbolos> ListaSimbolos= new ArrayList<TablaSimbolos>();
 	List<TablaSimbolos> ListaTemporal= new ArrayList<TablaSimbolos>();
-        
 	int cont=0;
 	int cont1=1;
 	boolean Clasemas = false;
@@ -80,7 +79,7 @@ terminal           	SEMI, OP_SUMA, OP_RESTA, OP_MULT, CONSTDOUBLE, CONSTENTERO,C
 					SUMA, RESTA, MULTIPLICACION, DIVISION, PORCENTAJE,
 					MENOR, MENORIGUAL, MAYOR, MAYORIGUAL, IGUAL, IGUALDAD, DIFERENTE, AND, OR, NEGACION,
 					PUNTOYCOMA, COMA, PUNTO, CORCHIZQ, CORCHDER, PARENIZQ, PARENDER, LLAVEIZQ, LLAVEDER,
-					CORCHETES, PARENTESIS, LLAVES, IDENTIFICADOR;
+					CORCHETES, PARENTESIS, LLAVES, IDENTIFICADOR, CONSTANTE ,INCLUDE, NUMERAL;
 terminal Integer   	ENTERO;
    
 /* No terminales usados en la seccion gramatical. 
@@ -96,7 +95,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 						Type, Formals, StmtBlock, Formals2, ClassDecl2, ClassDecl3, Ident2, Field, Field2,
 						Prototype, InterfaceDecl2, StmtBlock2, StmtBlock3, Stmt, Expr, Expr2, IfStmt, WhileStmt,
 						ForStmt, BreakStmt, ReturnStmt, PrintStmt, IfStmt2, Expr3, LValue, Constant, Call, LibCall,
-						Actuals, ConjuntoBlock;
+						Actuals, ConjuntoBlock, IncludeDecl;
    
 
 /* -------------Seccion de predencia y asociacion de los terminales----------- */
@@ -105,6 +104,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
   Precedencia de los no terminales, no sirve con simbolos terminales.
   Por eso no la usamos. Además indica si se asocia a izquierda o derecha.
 */
+ 
   precedence left COMA, PUNTO, PUNTOYCOMA;
   precedence left IGUAL;
   precedence left OR;
@@ -131,17 +131,16 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 				
 	Program2 ::= Decl Program2
 				| /*vacio*/
-                                
 				;
 				
-	Decl 	::= VariableDecl
+	Decl 	::= VariableDecl:i
 				{:
 					for(int z=0; z < ListaTemporal.size(); z++)
 					{
 						TablaSimbolos Tabla = new TablaSimbolos(ListaTemporal.get(z).nombre, ListaTemporal.get(z).tipo, ListaTemporal.get(z).valor, ListaTemporal.get(z).bandera, 0, 0);
 						if(Tabla.VerificarVariable(ListaTemporal.get(z).nombre, ListaSimbolos, 0).equals(true))
 						{
-							System.out.println(" Id Existente "); 
+							System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la variable: "+ListaTemporal.get(z).nombre + "  EXISTE "); 
 						}
 						else
 						{
@@ -170,14 +169,27 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 
 				:}
 				| InterfaceDecl
+				{:
+					Clasemas = false;
+					ManejarClase = false;
+
+				:}
+				| IncludeDecl
 				| error PUNTOYCOMA
+				| error MAYOR
 				| error PARENIZQ
 				;
 
 	VariableDecl ::= Variable PUNTOYCOMA
+					| CONSTANTE Variable PUNTOYCOMA
 					;
 					
-	Variable ::= Type:t IDENTIFICADOR:i
+	IncludeDecl ::=	 NUMERAL INCLUDE MENOR IDENTIFICADOR PUNTO IDENTIFICADOR MAYOR
+				;
+					
+
+					
+	Variable ::=Type:t IDENTIFICADOR:i
 				{:
 					if(verInstancia==true)
 					{
@@ -186,7 +198,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							TablaSimbolos Tabla =new TablaSimbolos(i.toString(),t.toString(),"",1,cont, 0);
 							if(Tabla.VerificarVariable(i.toString(), ListaTemporal, cont).equals(true))
 							{
-								System.out.println(" El " + i.toString() + " ya existe en la tabla de simbolos "); 
+								
+								System.out.println("ERROR EN LA LINEA: "+ileft+ " columna "+iright+ " la variable: "+i.toString()  + " EXISTE "); 
 							}
 							else
 							{
@@ -195,7 +208,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							
 							RESULT = t;
-							System.out.println(" Variable  =   " + t +" "+ i); 
+							
 						}
 					}
 					else
@@ -203,7 +216,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 						TablaSimbolos Tabla =new TablaSimbolos(i.toString(),t.toString(),"",1,cont, 0);
 						if(Tabla.VerificarVariable(i.toString(), ListaTemporal, cont).equals(true))
 						{
-							System.out.println(" El " + i.toString() + " ya existe en la tabla de simbolos "); 
+						
+							System.out.println("ERROR EN LA LINEA: "+ileft+ " columna "+iright+ " la variable: "+i.toString()  + "   EXISTE "); 
 						}
 						else
 						{
@@ -212,7 +226,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 						}
 						
 						RESULT = t;
-						System.out.println(" Variable  =   " + t +" "+ i); 
+						
 					}
 					verInstancia=false;
 						
@@ -241,8 +255,6 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 				{:
 					
                     RESULT = e;
-					
-					
 					TablaSimbolos Tabla =new TablaSimbolos(e.toString(),"class","",4,cont, 0);
 					if(Tabla.VerificarClase(e.toString(), ListaSimbolos).equals(true))
 					{
@@ -251,10 +263,12 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					}
 					else
 					{
-						System.out.println("ERROR DECLARACION DE LA CLASE" );
+						
+						System.out.println("ERROR EN LA LINEA: "+eleft+ " columna "+eright+ " la clase: "+e.toString()  + ", no existe "); 
 						ExisteInstancia=false;
 						verInstancia=true;
 					}
+					
 					
 				:}
 			| Type:e CORCHETES:f
@@ -274,7 +288,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && ListaSimbolos.get(z).clases == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE" );
+										
+										System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "  EXISTE"); 
 							}
 							else
 							{
@@ -291,7 +306,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && (ListaSimbolos.get(z).clases)+1 == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE" );
+										
+										System.out.println("ERROR EN LA LINEA:  "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "  EXISTE"); 
 							}
 							else
 							{
@@ -299,6 +315,11 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								break;
 							}
 						} 
+					}
+					if(ListaSimbolos.size()==0)
+					{
+						TablaSimbolos Tabla1 = new TablaSimbolos(i.toString(), t.toString(), "", 3, cont, 0);
+						ListaSimbolos.add(Tabla1);
 					}
 					
 						
@@ -315,7 +336,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && ListaSimbolos.get(z).clases == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE" );
+										System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "  EXISTE "); 
 							}
 							else
 							{
@@ -332,7 +353,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && (ListaSimbolos.get(z).clases)+1 == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE" );
+										System.out.println("ERROR EN LA LINEA: "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "   EXISTE "); 
 							}
 							else
 							{
@@ -340,6 +361,11 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								break;
 							}
 						} 
+					}
+					if(ListaSimbolos.size()==0)
+					{
+						TablaSimbolos Tabla1 = new TablaSimbolos(i.toString(), t.toString(), "", 3, cont, 0);
+						ListaSimbolos.add(Tabla1);
 					}
 
 					:}
@@ -353,7 +379,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && ListaSimbolos.get(z).clases == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE");
+										System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "   EXISTE"); 
 							}
 							else
 							{
@@ -370,7 +396,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && (ListaSimbolos.get(z).clases)+1 == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE" );
+										System.out.println("ERROR EN LA LINEA:  "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "  EXISTE "); 
 							}
 							else
 							{
@@ -378,6 +404,11 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								break;
 							}
 						} 
+					}
+					if(ListaSimbolos.size()==0)
+					{
+						TablaSimbolos Tabla1 = new TablaSimbolos(i.toString(), t.toString(), "", 3, cont, 0);
+						ListaSimbolos.add(Tabla1);
 					}
 					:}
 					| VOID:t IDENTIFICADOR:i PARENTESIS StmtBlock
@@ -390,7 +421,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && ListaSimbolos.get(z).clases == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE" );
+								System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + " EXISTE "); 
 							}
 							else
 							{
@@ -407,7 +438,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							if(ListaSimbolos.get(z).nombre == Tabla1.nombre && (ListaSimbolos.get(z).clases)+1 == Tabla1.clases && ListaSimbolos.get(z).bandera == Tabla1.bandera)
 							{
 								
-										System.out.println("ERROR FUNCION CON EL MISMO NOMBRE");
+								System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la funcion: "+i.toString()  + "  EXISTE"); 
 							}
 							else
 							{
@@ -416,33 +447,19 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 						} 
 					}
+					if(ListaSimbolos.size()==0)
+					{
+						TablaSimbolos Tabla1 = new TablaSimbolos(i.toString(), t.toString(), "", 3, cont+1, 0);
+						ListaSimbolos.add(Tabla1);
+					}
 
 					:} 
 					;
 
 	Formals ::= Variable:v Formals2:f
 				{:
-				    cont1=2;
-					System.out.println(" FORMALS  =   " + v +" "+ f ); 
-					if(f!=null)
-					{
-						if (v.equals(f)) 
-						{
-							System.out.println(" MISMO TIPO" ); 
-							RESULT = v;
-						}
-						else
-						{
-							System.out.println("ERROR NO ES EL MISMO TIPO"); 
-							RESULT="n";
-						}
-					}
-					else
-					{
-						System.out.println(" No Existe F2" );
-						RESULT=v;
-					}
-
+				    
+					RESULT = v;
 					for(int i=0; i < ListaTemporal.size(); i++)
 					{
 						ListaTemporal.get(i).bparametro = 1;
@@ -453,27 +470,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 				
 	Formals2 ::=COMA Variable:v Formals2:f 
 				{:
-                    cont1=2;
-					System.out.println(" Formals2  =   " + v + " " + f );
-					
-					if(f!=null)
-					{
-						if (v.equals(f))
-						{
-						
-							System.out.println("MISMO TIPO" ); 
-							RESULT = v;
-						}
-						else
-						{
-							System.out.println("ERROR NO ES EL MISMO TIPO"); 
-							RESULT = "n";
-						}
-					}
-					else
-					{
-						RESULT = v;
-					}
+                    
+					RESULT = v;
 					
 				:}
 				| /*vacio*/
@@ -485,7 +483,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					TablaSimbolos Tabla =new TablaSimbolos(i.toString(),"class","",4,cont, 0);
 					if(Tabla.VerificarClase(i.toString(), ListaSimbolos).equals(true))
 					{
-						System.out.println(" ID EXISTENTE "); 
+						System.out.println("ERROR EN LA LINEA:  "+ileft+ " columna "+iright+ " la clase: "+i.toString()  + "   EXISTE "); 
 					}
 					else
 					{
@@ -493,9 +491,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 						
 					}
 					
-                    //RESULT = t;
-					System.out.println(" CLASE  =   " + " " + i); 
-					cont1=1;
+                   
 				:}
 				| CLASS IDENTIFICADOR:i ClassDecl2 ClassDecl3  LLAVES
 				{:
@@ -503,29 +499,76 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					TablaSimbolos Tabla =new TablaSimbolos(i.toString(),"class","",4,cont, 0);
 					if(Tabla.VerificarClase(i.toString(), ListaSimbolos).equals(true))
 					{
-						System.out.println(" ID EXISTENTE "); 
+						System.out.println("ERROR EN LA LINEA:  "+ileft+ " columna "+iright+ " la clase: "+i.toString()  + "  EXISTE "); 
 					}
 					else
 					{
 						ListaSimbolos.add(Tabla);
 						
 					}
+     
 					
-                    //RESULT = t;
-					System.out.println(" CLASE  =   " + " " + i); 
-					cont1=1;
 				:}
 				;
 				
-	ClassDecl2 ::= EXTENDS IDENTIFICADOR 
+	ClassDecl2 ::= EXTENDS IDENTIFICADOR:i 
+				{:
+				
+					TablaSimbolos Tabla =new TablaSimbolos(i.toString(),"class","",4,cont, 0);
+					if(Tabla.VerificarClase(i.toString(), ListaSimbolos).equals(true))
+					{
+					
+					}
+					else
+					{
+						
+						System.out.println("ERROR EN LA LINEA:  "+ileft+ " columna "+iright+ " la clase extends: "+i.toString()  + ", no existe "); 						
+						
+					}
+					
+					 
+				:}
 					| /*vacio*/ 
 					;
 					
-	ClassDecl3 ::= IMPLEMENTS IDENTIFICADOR Ident2 
+	ClassDecl3 ::= IMPLEMENTS IDENTIFICADOR:i Ident2 
+				{:
+				
+					TablaSimbolos Tabla =new TablaSimbolos(i.toString(),"class","",4,cont, 0);
+					if(Tabla.VerificarClase(i.toString(), ListaSimbolos).equals(true))
+					{
+						
+					}
+					else
+					{
+						
+						System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la clase implements: "+i.toString()  + ", no existe "); 				
+						
+					}
+					
+					 
+				:}
+				
 				|/*vacio*/ 
 				;
 				
-	Ident2 ::= COMA IDENTIFICADOR Ident2 
+	Ident2 ::= COMA IDENTIFICADOR:i Ident2 
+				{:
+			
+					TablaSimbolos Tabla =new TablaSimbolos(i.toString(),"class","",4,cont, 0);
+					if(Tabla.VerificarClase(i.toString(), ListaSimbolos).equals(true))
+					{
+						
+					}
+					else
+					{
+						System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la clase implements: "+i.toString()  + ", no existe "); 
+						
+					}
+					
+				 
+				:}
+				
 				| /*vacio*/
 				;
 				
@@ -533,7 +576,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 				| /*vacio*/
 				;
 				
-	Field ::= VariableDecl 
+	Field ::= VariableDecl:i 
 			{:
 				if(Clasemas==false)
 					{
@@ -547,7 +590,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 						TablaSimbolos Tabla = new TablaSimbolos(ListaTemporal.get(z).nombre, ListaTemporal.get(z).tipo, ListaTemporal.get(z).valor, ListaTemporal.get(z).bandera, ListaTemporal.get(z).clases, 0);
 						if(Tabla.VerificarVariable(ListaTemporal.get(z).nombre, ListaSimbolos, cont).equals(true))
 						{
-							System.out.println(" ID EXISTENTE "); 
+							
+							System.out.println("ERROR EN LA LINEA:   "+ileft+ " columna "+iright+ " la declaracion variable: "+ListaTemporal.get(z).nombre  + "  EXISTE "); 
 						}
 						else
 						{
@@ -575,7 +619,29 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			:}
 			;
 			
-	InterfaceDecl ::= INTERFACE IDENTIFICADOR LLAVEIZQ InterfaceDecl2 LLAVEDER
+	InterfaceDecl ::= INTERFACE IDENTIFICADOR:i LLAVEIZQ InterfaceDecl2 LLAVEDER
+					{:
+					
+					if(Clasemas==false)
+					{
+						cont++;
+						Clasemas=true;
+					}
+					
+					TablaSimbolos Tabla =new TablaSimbolos(i.toString(),"class","",4,cont, 0);
+					if(Tabla.VerificarClase(i.toString(), ListaSimbolos).equals(true))
+					{
+						
+						System.out.println("ERROR EN LA LINEA:    "+ileft+ " columna "+iright+ " la clase interface: "+i.toString() + "     EXISTE"); 
+					}
+					else
+					{
+						ListaSimbolos.add(Tabla);
+						
+					}
+					    
+					
+					:}
 					| INTERFACE IDENTIFICADOR LLAVES  
 					;
 					
@@ -662,7 +728,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								
 								if(t.toString().equals(""))
 								{
-									
+									//si es nuemro agregar 0
 								}
 								else if(ListaTemporal.get(i).tipo.equals("int")||ListaTemporal.get(i).tipo.equals("double") && Operaciones.isNumeric(t.toString())==true )
 								{
@@ -684,7 +750,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								}
 								else
 								{
-									System.out.println(" TIPO DE LA VARIABLE NO ES EL MISMO "); 
+									
+									System.out.println("ERROR EN LA LINEA "+tleft+ " columna "+tright+ " El valor asignado no es el mismo tipo de la variable: "+l.toString()); 
 								}
 								Correcto=true;
 								VerAmbito=true;
@@ -723,7 +790,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								}
 							else
 								{
-									System.out.println(" TIPO DE LA VARIABLE NO ES EL MISMO "); 	
+										
+									System.out.println("ERROR EN LA LINEA "+tleft+ " columna "+tright+ " El valor asignado no es el mismo tipo de la variable: "+l.toString()); 
 									
 								}
 							Correcto=true;
@@ -760,7 +828,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								}
 								else
 								{
-									System.out.println(" TIPO DE LA VARIABLE NO ES EL MISMO ");						
+									System.out.println("ERROR EN LA LINEA "+tleft+ " columna "+tright+ " El valor asignado no es el mismo tipo de la variable: "+l.toString()); 						
 								
 								}
 								Correcto=true;
@@ -775,7 +843,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 				if (Correcto==false)
 				{
 				
-					System.out.println(" ERROR NO EXISTE LA VARIABLE"); 
+					 
+					System.out.println("ERROR EN LA LINEA "+lleft+ " columna "+lright+ " No existe la variable: " +l.toString()+ ", que desea asignarle valor" ); 
 					
 				}
 				Correcto=false;
@@ -787,10 +856,14 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			{:
 				RESULT = e;	 
 			:}
-			| Call 
+			| Call
+			{:
+				RESULT = "";
+					
+			:}
 			| THIS:e
 			{:
-				RESULT = e;
+				RESULT = "";
 					
 			:}
 			| LValue:e
@@ -805,23 +878,31 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			:}
 			| Expr:m SUMA Expr:t
 			{:
+				String resultado;
 				String valor="";
+				String agrupar;
 				if(Operaciones.isNumeric(m.toString())==true && Operaciones.isNumeric(t.toString())==true)
 				{
-				RESULT= m+ " + " +t;
+					agrupar = m+ " + " +t;
+					RESULT=Operaciones.Validar("", agrupar);
+				
 				}
 				else
 				{
-					if(Operaciones.isNumeric(m.toString())==true)
+					if(Operaciones.isNumeric(m.toString())==true )
 					{
 						if(t.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES "); 
+							
+							System.out.println("ERROR EN LA LINEA: "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());							
+							
 							RESULT="";
 						}
+							
 						else
 						{
-						
+							
+							
 							for(int i=0; i < ListaTemporal.size(); i++)
 							{
 								if(ListaTemporal.get(i).nombre.equals(t.toString()))
@@ -861,7 +942,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								for(int i=0; i < ListaSimbolos.size(); i++)
 									{
 									
-											if(ListaSimbolos.get(i).nombre.equals(m.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
+											if(ListaSimbolos.get(i).nombre.equals(t.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
 											{
 											
 												valor=ListaSimbolos.get(i).valor;
@@ -874,25 +955,31 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO "); 
+									
+									System.out.println("ERROR EN LA LINEA:  "+tleft+ " columna "+tright+ " la variable: " +t.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 									
 								}
 								else
 								{
-								RESULT= m+ " + " +valor;
+									agrupar = m+ " + " +valor;
+									RESULT=Operaciones.Validar("", agrupar);
+								
 								}
 								VerAmbito=false;
 						}
 						
 					}
-					else if(Operaciones.isNumeric(t.toString())==true)
+					else if(Operaciones.isNumeric(t.toString())==true )
 					{
 						if(m.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES "); 
+							 
+							System.out.println("ERROR EN LA LINEA:  "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());
 							RESULT="";
 						}
+						
+							
 						else
 						{
 						
@@ -951,13 +1038,17 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO "); 
+									
+									System.out.println("ERROR EN LA LINEA:  "+tleft+ " columna "+tright+ " la variable: " +m.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 								
 								}
 							else
 								{
-								RESULT= valor+ " + " +t;
+									agrupar = valor+ " + " +t;
+									RESULT=Operaciones.Validar("", agrupar);
+								
+									
 								}
 							
 								VerAmbito=false;
@@ -967,8 +1058,10 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					}
 					else //los dos son string 
 					{
+						
+						
 						RESULT=  m.toString()+t.toString();
-							
+	
 					}
 					
 				}
@@ -976,10 +1069,12 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			:}
 			| Expr:m RESTA Expr:t 
 			{:
+				String agrupar;
 				String valor="";
 				if(Operaciones.isNumeric(m.toString())==true && Operaciones.isNumeric(t.toString())==true)
 				{
-				RESULT= m+ " - " +t;
+					agrupar = m+ " - " +t;
+					RESULT=Operaciones.Validar("", agrupar);
 				}
 				else
 				{
@@ -987,7 +1082,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					{
 						if(t.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES "); 
+							
+							System.out.println("ERROR EN LA LINEA:   "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());
 							RESULT="";
 						}
 						else
@@ -1032,7 +1128,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								for(int i=0; i < ListaSimbolos.size(); i++)
 									{
 									
-											if(ListaSimbolos.get(i).nombre.equals(m.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
+											if(ListaSimbolos.get(i).nombre.equals(t.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
 											{
 											
 												valor=ListaSimbolos.get(i).valor;
@@ -1045,13 +1141,15 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO "); 
+									
+									System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " la variable: " +t.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 									
 								}
 								else
 								{
-								RESULT= m+ " - " +valor;
+								agrupar =m+ " - " +valor;
+								RESULT=Operaciones.Validar("", agrupar);
 								}
 								VerAmbito=false;
 						}
@@ -1061,7 +1159,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					{
 						if(m.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES "); 
+							
+							System.out.println("ERROR EN LA LINEA:  "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());
 							RESULT="";
 						}
 						else
@@ -1122,13 +1221,16 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO "); 
+									System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " la variable: " +m.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 								
 								}
 							else
 								{
-								RESULT= valor+ " - " +t;
+							
+								
+									agrupar =valor+ " - " +t;
+									RESULT=Operaciones.Validar("", agrupar);
 								}
 							
 								VerAmbito=false;
@@ -1138,7 +1240,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					}
 					else //los dos son string 
 					{
-						System.out.println(" ERROR DOS STRINGS NO SE RESTAN"); 
+						
+						System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " no se pueden restar dos strings: " +m.toString()+ " y " +t.toString() );						
 						RESULT="";
 							
 					}
@@ -1147,10 +1250,13 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			:}
 			| Expr:m MULTIPLICACION Expr:t
 			{:
+				String agrupar;
 				String valor="";
 				if(Operaciones.isNumeric(m.toString())==true && Operaciones.isNumeric(t.toString())==true)
 				{
-				RESULT= m+ " * " +t;
+				
+					agrupar = m+ " * " +t;
+					RESULT=Operaciones.Validar("", agrupar);
 				}
 				else
 				{
@@ -1158,7 +1264,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					{
 						if(t.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES"); 
+							
+							System.out.println("ERROR EN LA LINEA:   "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());
 							RESULT="";
 						}
 						else
@@ -1203,7 +1310,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								for(int i=0; i < ListaSimbolos.size(); i++)
 									{
 									
-											if(ListaSimbolos.get(i).nombre.equals(m.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
+											if(ListaSimbolos.get(i).nombre.equals(t.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
 											{
 											
 												valor=ListaSimbolos.get(i).valor;
@@ -1216,13 +1323,15 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO"); 
+									
+									System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " la variable: " +t.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 									
 								}
 								else
 								{
-								RESULT= m+ " * " +valor;
+									agrupar =m+ " * " +valor;
+									RESULT=Operaciones.Validar("", agrupar);
 								}
 								VerAmbito=false;
 						}
@@ -1232,7 +1341,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					{
 						if(m.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES "); 
+							
+							System.out.println("ERROR EN LA LINEA:  "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());
 							RESULT="";
 						}
 						else
@@ -1293,13 +1403,16 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO"); 
+									
+									System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " la variable: " +m.toString()+ ", no tiene valor asignado"  );									
 									RESULT="";
 								
 								}
 							else
 								{
-								RESULT= valor+ " * " +t;
+								
+									agrupar =valor+ " * " +t;
+									RESULT=Operaciones.Validar("", agrupar);
 								}
 							
 								VerAmbito=false;
@@ -1309,7 +1422,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					}
 					else //los dos son string 
 					{
-						System.out.println(" ERROR NO SE PUEDEN MULTIPLICAR STRINGS"); 
+						System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " no se pueden multiplicar dos strings: " +m.toString()+ " y " +t.toString() );
 						RESULT="";
 							
 					}
@@ -1319,10 +1432,13 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			:}
 			| Expr:m DIVISION Expr:t 
 			{:
+				String agrupar;
 				String valor="";
 				if(Operaciones.isNumeric(m.toString())==true && Operaciones.isNumeric(t.toString())==true)
 				{
-				RESULT= m+ " / " +t;
+				
+					agrupar = m+ " / " +t;
+					RESULT=Operaciones.Validar("", agrupar);
 				}
 				else
 				{
@@ -1330,7 +1446,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					{
 						if(t.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES"); 
+							
+							System.out.println("ERROR EN LA LINEA:  "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());							
 							RESULT="";
 						}
 						else
@@ -1375,7 +1492,7 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 								for(int i=0; i < ListaSimbolos.size(); i++)
 									{
 									
-											if(ListaSimbolos.get(i).nombre.equals(m.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
+											if(ListaSimbolos.get(i).nombre.equals(t.toString()) && ListaSimbolos.get(i).bandera==1 && ListaSimbolos.get(i).clases==0 )
 											{
 											
 												valor=ListaSimbolos.get(i).valor;
@@ -1388,13 +1505,16 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO"); 
+									
+									System.out.println("ERROR EN LA LINEA:  "+tleft+ " columna "+tright+ " la variable: " +t.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 									
 								}
 								else
 								{
-								RESULT= m+ " / " +valor;
+								
+									agrupar =m+ " / " +valor;
+									RESULT=Operaciones.Validar("", agrupar);
 								}
 								VerAmbito=false;
 						}
@@ -1404,7 +1524,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					{
 						if(m.toString().contains("\""))
 						{
-							System.out.println(" ERROR TIPOS NO COMPATIBLES "); 
+							
+							System.out.println("ERROR EN LA LINEA:   "+mleft+ " columna "+mright+ " los tipos no son compatibles :" +m.toString()+ " y " +t.toString());	
 							RESULT="";
 						}
 						else
@@ -1465,13 +1586,16 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 							}
 							if (valor=="")
 								{
-									System.out.println(" ERROR VARIABLE NO ASIGNADO "); 
+									
+									System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " la variable: " +m.toString()+ ", no tiene valor asignado"  );
 									RESULT="";
 								
 								}
 							else
 								{
-								RESULT= valor+ " / " +t;
+								
+									agrupar =valor+ " / " +t;
+									RESULT=Operaciones.Validar("", agrupar);
 								}
 							
 								VerAmbito=false;
@@ -1481,7 +1605,8 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					}
 					else //los dos son string 
 					{
-						System.out.println(" ERROR NO SE PUEDEN DIVIDIR DOS STRINGS "); 
+						
+						System.out.println("ERROR EN LA LINEA:   "+tleft+ " columna "+tright+ " no se pueden dividir dos strings: " +m.toString()+ " y " +t.toString() );
 						RESULT="";
 							
 					}
@@ -1495,32 +1620,106 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 			:}
 			| RESTA:r Expr:e
 			{:
-				RESULT=e;	
+				RESULT="";	
 			:}
 			| Expr MENOR Expr 
+			{:
+				
+				RESULT = "";
+					 
+			:}
 			| Expr MENORIGUAL Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| Expr MAYOR Expr
 			{:
-					
+				RESULT = "";
+					 
 			:}
 			| Expr MAYORIGUAL Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| Expr IGUALDAD Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| Expr DIFERENTE Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| Expr AND Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| Expr OR Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| NEGACION Expr 
+			{:
+				RESULT = "";
+					 
+			:}
 			| NEW PARENIZQ IDENTIFICADOR PARENDER 
+			{:
+				RESULT = "";
+					 
+			:}
 			| NEWARRAY PARENIZQ Expr COMA Type PARENDER
+			{:
+				RESULT = "";
+					 
+			:}
 			| READINTEGER PARENIZQ PARENDER 
+			{:
+				RESULT = "";
+					 
+			:}
 			| READINTEGER PARENTESIS
+			{:
+				RESULT = "";
+					 
+			:}
 			| READLINE PARENTESIS
-			| READLINE PARENIZQ PARENDER  
+			{:
+				RESULT = "";
+					 
+			:}
+			| READLINE PARENIZQ PARENDER 
+			{:
+				RESULT = "";
+					 
+			:}			
 			| MALLOC PARENIZQ  Expr PARENDER
+			{:
+				RESULT = "";
+					 
+			:}
 			;
 			
 	Call ::= IDENTIFICADOR PARENIZQ Actuals PARENDER 
+			{:
+				RESULT="";
+					 
+			:}
 			| Expr PUNTO IDENTIFICADOR PARENIZQ Actuals PARENDER
+			{:
+				RESULT="";
+					 
+			:}
 			| Expr PUNTO LibCall PARENIZQ Actuals PARENDER
+			{:
+				RESULT="";
+					 
+			:}
 			;
 			
 	LValue ::= IDENTIFICADOR:e
@@ -1534,15 +1733,25 @@ non terminal Object		Program, Decl, Program2, VariableDecl, FunctionDecl, ClassD
 					 
 			:}			
 			
-			
-			
 			| Expr CORCHIZQ Expr CORCHDER
+			{:
+				RESULT="";
+					 
+			:}
 			;
 			
 	
 			
 	LibCall ::= GETBYTE PARENIZQ Expr PARENDER 
+			{:
+				RESULT = "";
+					 
+			:}
 			| SETBYTE PARENIZQ Expr COMA Expr PARENDER
+			{:
+				RESULT = "";
+					 
+			:}
 			;
 			
 	Actuals ::= Expr Expr3 

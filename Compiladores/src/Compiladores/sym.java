@@ -11,7 +11,7 @@ public class sym {
   public static final int CORCHETES = 59;
   public static final int READLINE = 32;
   public static final int PUNTOYCOMA = 50;
-  public static final int ENTERO = 63;
+  public static final int ENTERO = 66;
   public static final int DIFERENTE = 46;
   public static final int RESTA = 36;
   public static final int DOUBLE = 12;
@@ -23,6 +23,7 @@ public class sym {
   public static final int INTERFACE = 16;
   public static final int INT = 11;
   public static final int FOR = 21;
+  public static final int CONSTANTE = 63;
   public static final int IDENTIFICADOR = 62;
   public static final int AND = 47;
   public static final int MENORIGUAL = 41;
@@ -46,6 +47,7 @@ public class sym {
   public static final int RETURN = 25;
   public static final int NEW = 27;
   public static final int error = 1;
+  public static final int INCLUDE = 64;
   public static final int COMA = 51;
   public static final int OP_MULT = 5;
   public static final int NEGACION = 49;
@@ -63,6 +65,7 @@ public class sym {
   public static final int WHILE = 22;
   public static final int LLAVEIZQ = 57;
   public static final int CONSTENTERO = 7;
+  public static final int NUMERAL = 65;
   public static final int CONSTDOUBLE = 6;
   public static final int EXTENDS = 19;
   public static final int STRING = 14;
@@ -136,6 +139,9 @@ public class sym {
   "PARENTESIS",
   "LLAVES",
   "IDENTIFICADOR",
+  "CONSTANTE",
+  "INCLUDE",
+  "NUMERAL",
   "ENTERO"
   };
 }

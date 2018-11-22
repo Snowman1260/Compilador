@@ -98,9 +98,16 @@ public class Operaciones {
         File salida = new File ("TablaSimbolos.out");
         writer = new PrintWriter(salida);
         writer.println("Ambito"+","+"Tipo"+","+"Valor Ambito"+","+"Tipo Ambito"+","+"Numero Clase"+","+"Parametro"+"\n");
+        String SalidaDelArchivoString = "";
         for (int i = 0; i < ListaSimbolos.size(); i++) 
         {
-            writer.println(ListaSimbolos.get(i).nombre+","+ListaSimbolos.get(i).tipo+","+ListaSimbolos.get(i).valor+","+ListaSimbolos.get(i).bandera+","+ListaSimbolos.get(i).clases+","+ListaSimbolos.get(i).bparametro+"\n");
+            SalidaDelArchivoString = ListaSimbolos.get(i).nombre+","+ListaSimbolos.get(i).tipo+","+ListaSimbolos.get(i).valor+","+ListaSimbolos.get(i).bandera+","+ListaSimbolos.get(i).clases+","+ListaSimbolos.get(i).bparametro+"\n" ;
+            SalidaDelArchivoString = SalidaDelArchivoString.replaceAll("0", "Variable");
+            SalidaDelArchivoString = SalidaDelArchivoString.replaceAll("1", "Variable Global");
+            SalidaDelArchivoString = SalidaDelArchivoString.replaceAll("2", "Variable");
+            SalidaDelArchivoString = SalidaDelArchivoString.replaceAll("3", "Variable");
+            SalidaDelArchivoString = SalidaDelArchivoString.replaceAll("4", "Variable");
+            writer.println(SalidaDelArchivoString);
         }
 
          writer.close();

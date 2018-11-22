@@ -1,66 +1,38 @@
 Ambito,Tipo,Valor Ambito,Tipo Ambito,Numero Clase,Parametro
 
-My_String,string,,1,0,0
+globalVariable Global,int,,Variable Global,Variable,Variable
 
-a1,int,,1,1,0
+globalVariable,int,,Variable Global,Variable,Variable
 
-My_String,string,"This is a string",1,0,0
+globalVariable,double,,Variable Global,Variable,Variable
 
-f1,int,,3,1,0
+perimeter,double,,Variable Global,Variable Global,Variable
 
-a,int,,2,1,1
+CalculatePerimeter,void,,Variable,Variable Global,Variable
 
-b,int,,2,1,1
+sideA,int,,Variable,Variable Global,Variable Global
 
-c,int,,2,1,1
+sideB,int,,Variable,Variable Global,Variable Global
 
-proc1,void,,3,1,0
+perimeter,double,,Variable,Variable Global,Variable
 
-y,double,,2,1,1
+CalculateArea,double,,Variable,Variable Global,Variable
 
-Parser,class,,4,1,0
+sideA,int,,Variable,Variable Global,Variable Global
 
-main,void,,3,0,0
+sideB,int,,Variable,Variable Global,Variable Global
 
-m1,int,,2,0,0
+area,double,,Variable,Variable Global,Variable
 
-m2,int,,2,0,0
+ReturnSumSides,int,,Variable,Variable Global,Variable
 
-m3,double,,2,0,0
+sideA,int,,Variable,Variable Global,Variable Global
 
-MyParser,Parser,,2,0,0
+sideB,int,,Variable,Variable Global,Variable Global
 
-m2,int,MyParser,2,0,0
+sum,int,,Variable,Variable Global,Variable
 
-m2,int,1,2,0,0
+sum,int,sideAsideB,Variable,Variable Global,Variable
 
-a1,int,,1,2,0
-
-My_String,string,"This is a string",1,0,0
-
-f1,int,,3,2,0
-
-a,int,,2,2,1
-
-b,int,,2,2,1
-
-c,int,,2,2,1
-
-proc1,void,,3,2,0
-
-y,double,,2,2,1
-
-main,void,,3,0,0
-
-m1,int,,2,0,0
-
-m2,int,,2,0,0
-
-m3,double,,2,0,0
-
-MyParser,Parser,,2,0,0
-
-m2,int,MyParser,2,0,0
-
-m2,int,1,2,0,0
+Rectangule,class,,Variable,Variable Global,Variable
 
